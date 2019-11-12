@@ -2,7 +2,11 @@
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
+#if NETSTANDARD1_6
 using Microsoft.AspNetCore.Http.Internal;
+#else
+using Microsoft.AspNetCore.Http;
+#endif
 
 namespace LtiLibrary.AspNetCore.Common
 {
@@ -22,7 +26,11 @@ namespace LtiLibrary.AspNetCore.Common
             var httpContext = context.HttpContext;
             var request = httpContext.Request;
 
+#if NETSTANDARD1_6
             request.EnableRewind();
+#else
+            request.EnableBuffering();
+#endif
 
             if (request.Body.CanRead)
             {
